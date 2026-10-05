@@ -75,6 +75,6 @@ For standalone TDD, use `docs/work/<change>/tdd.md`; when a ticket exists, recor
 
 Apply the service's existing domain and library ownership rules.
 
-Use focused tests while implementing. For application code, required completion checks are those in `ci/test.sh`: `mix format --check-formatted`, `mix credo --strict`, and `mix test`. Inspect the script and environment before execution; the test database and configured service mocks must be available. Existing CI security and acceptance gates remain applicable before integration/release. For documentation or skill-only changes, validate the affected artifacts and references; an application test run is not required.
+Use focused tests while implementing. Find each execution repository's required completion checks through the [context map](../../CONTEXT-MAP.md) or [context](../../CONTEXT.md), and inspect their definitions and environment prerequisites before execution. Existing CI security and acceptance gates remain applicable before integration/release. For documentation or skill-only changes, validate the affected artifacts and references; an application test run is not required.
 
 Record passed, failed and not-run checks separately. Missing infrastructure blocks completion when it prevents a required check; it is not evidence of a code regression or a pass. Capture the implementation baseline and relevant pre-existing changes. Review must include relevant new files and uncommitted changes, not only a HEAD diff. A review only applies to its recorded snapshot.
