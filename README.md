@@ -21,7 +21,7 @@ flowchart TD
         implement -.->|Supporting method for behavior changes| tdd
     end
 
-    implement -->|Acceptance and required checks pass| review["code-review: inspect the delivered change"]
+    implement -->|Acceptance and required checks pass| review["review-ticket: inspect the delivered change"]
     review -->|Findings need fixes| implement
     review -->|Acceptance and checks pass, current snapshot, no material findings| done["Ticket done"]
 ```
@@ -36,7 +36,7 @@ The arrows show handoffs that the user invokes. Promote decisions before ticketi
 4. [`to-tickets`](workflow/to-tickets/SKILL.md) splits the spec or settled requirements into work items sized for separate implementation sessions. Each ticket includes acceptance coverage, dependencies, required reading and verification. A ticket is `ready` only when requirements are settled and dependency outputs are available.
 5. [`implement`](workflow/implement/SKILL.md) completes one ticket or bounded change, runs the required checks, and saves progress and verification evidence in the ticket. Passing work moves to `review`; an unavailable prerequisite or required check leaves it `blocked` with a resume condition.
 6. [`tdd`](workflow/tdd/SKILL.md) supports new behavior and reproducible bug fixes through a failing test, the smallest coherent implementation, and refactoring while tests pass. Ticket-based work records evidence in the ticket; standalone work uses a TDD record. Documentation and mechanical refactors use checks appropriate to the change.
-7. [`code-review`](workflow/code-review/SKILL.md) checks the exact delivered change against requirements and repository invariants, then saves findings and acceptance evidence in a review report. Fixes return through implementation and another review. A ticket becomes `done` only when the reviewed snapshot is current, acceptance and required checks pass, and no material finding remains.
+7. [`review-ticket`](workflow/review-ticket/SKILL.md) checks the exact delivered change against requirements and repository invariants, then saves findings and acceptance evidence in a review report. Fixes return through implementation and another review. A ticket becomes `done` only when the reviewed snapshot is current, acceptance and required checks pass, and no material finding remains.
 
 The skills can also accept direct inputs where their instructions allow it, such as settled requirements for specification or a bounded change for implementation. Use a fresh session for each implementation ticket and preferably for review.
 
@@ -61,7 +61,7 @@ $to-spec docs/work/<feature>/spec.md
 $promote-decisions docs/work/<feature>/spec.md
 $to-tickets docs/work/<feature>/spec.md
 $implement docs/work/<feature>/tickets/01-<name>.md
-$code-review docs/work/<feature>/tickets/01-<name>.md
+$review-ticket docs/work/<feature>/tickets/01-<name>.md
 ```
 
-Skip `promote-decisions` when no eligible promotion is needed. To resume clarification, pass the draft spec path to `clarify`. For review fixes, invoke `implement` with the ticket and review reference, then invoke `code-review` again. Invoke standalone TDD with `$tdd <bounded behavior or ticket path>`.
+Skip `promote-decisions` when no eligible promotion is needed. To resume clarification, pass the draft spec path to `clarify`. For review fixes, invoke `implement` with the ticket and review reference, then invoke `review-ticket` again. Invoke standalone TDD with `$tdd <bounded behavior or ticket path>`.

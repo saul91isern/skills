@@ -10,4 +10,4 @@ This pilot uses local Markdown files. No external tracker is configured.
 
 Clarification creates or updates a draft spec; specification refines that same file, dispositions documentation candidates and can mark it `specified`. Optional decision promotion updates configured authoritative documentation and records links in the same spec. None of these phases creates tickets. External issue creation, synchronization and closure are not configured.
 
-`to-tickets` creates local ticket files. `implement` updates their progress and verification evidence. `code-review` persists its report and updates the local ticket review reference/status. Preserve history; do not synchronize statuses to external systems automatically.
+`to-tickets` creates local ticket files. `implement` updates their progress and verification evidence. `review-ticket` persists its report and updates the local ticket review reference/status. Preserve history; do not synchronize statuses to external systems automatically.

@@ -1,10 +1,10 @@
 ---
-name: code-review
+name: review-ticket
 disable-model-invocation: true
 description: Review a defined change set against requirements and repository invariants. Save findings with supporting evidence and record completion status. Use when explicitly asked to review a ticket, branch, working tree or fixes to a prior review.
 ---
 
-# Code review
+# Review ticket
 
 Review correctness and requirement coverage in one report, with findings ordered by severity. Prefer a fresh session. Do not claim independence when reviewing in the implementation conversation. Do not spawn additional reviewers or modify application code as part of review.
 
