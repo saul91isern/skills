@@ -1,5 +1,6 @@
 ---
 name: implement
+disable-model-invocation: true
 description: Implement one ticket or bounded change, verify behavior and save an execution record for resuming work and independent review. Use when explicitly asked to implement a work item or fix findings from its review.
 ---
 

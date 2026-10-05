@@ -16,6 +16,8 @@ $implement docs/work/<feature>/tickets/01-<name>.md
 $code-review docs/work/<feature>/tickets/01-<name>.md
 ```
 
+For Claude Code, use `/skill-name` in place of `$skill-name`.
+
 `promote-decisions` is optional and explicit; skip it when the spec has no ready documentation candidates. `tdd` is supporting guidance during implementation and can also be invoked explicitly with `$tdd <bounded behavior or ticket path>`. It does not add a mandatory handoff. Each phase saves its result and identifies the next input without launching another phase. Invoke `implement` again with the ticket and review reference to address findings, then invoke `code-review` to verify the updated result.
 
 ## Project locations

@@ -1,5 +1,6 @@
 ---
 name: to-spec
+disable-model-invocation: true
 description: Turn clarified requirements or an existing draft into a concise specification with testable acceptance criteria and a verification approach. Use when explicitly asked to write or refine a spec before ticketing or implementation.
 ---
 

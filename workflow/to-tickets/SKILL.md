@@ -1,5 +1,6 @@
 ---
 name: to-tickets
+disable-model-invocation: true
 description: Split a specification or settled requirements into tickets that can be verified independently. Include dependencies, relevant context and acceptance criteria coverage. Use when explicitly asked to prepare work for separate implementation sessions.
 ---
 

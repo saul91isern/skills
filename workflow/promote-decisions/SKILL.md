@@ -1,5 +1,6 @@
 ---
 name: promote-decisions
+disable-model-invocation: true
 description: Move prepared domain context and architectural decision candidates from a specified feature spec into the authoritative documents named by each candidate. Use only when asked to promote decisions before ticketing or implementation.
 ---
 

@@ -1,5 +1,6 @@
 ---
 name: code-review
+disable-model-invocation: true
 description: Review a defined change set against requirements and repository invariants. Save findings with supporting evidence and record completion status. Use when explicitly asked to review a ticket, branch, working tree or fixes to a prior review.
 ---
 

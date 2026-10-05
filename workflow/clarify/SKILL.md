@@ -1,5 +1,6 @@
 ---
 name: clarify
+disable-model-invocation: true
 description: Investigate a proposed change and discuss the decisions that repository evidence cannot settle. Record decisions and open questions in a draft spec that another session can resume. Use when asked to explore an idea or resume clarification before specification.
 ---
 
