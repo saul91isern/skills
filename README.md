@@ -51,7 +51,7 @@ The pilot keeps each feature's draft and specified spec at `docs/work/<feature>/
 
 Copy the relevant directories from `workflow/` under the target project's `.agents/skills/`. Include `tdd` when using it as implementation guidance. Copy and adapt the support documents to the project's locations, tracker and required checks, and link them from its `AGENTS.md`.
 
-For Claude Code, copy the skill directories under `.claude/skills/` and link the support documents from `CLAUDE.md`. Use `/skill-name` in place of the Codex `$skill-name` syntax below. Workflow phases require explicit invocation in both clients.
+For Claude Code, copy the skill directories under `.claude/skills/` and link the support documents from `CLAUDE.md`. Use `/skill-name` in place of the Codex `$skill-name` syntax below. Workflow phases require explicit invocation in both clients. `tdd` allows model invocation as supporting guidance during implementation, and remains available for explicit invocation.
 
 For the local pilot, invoke the skills with full artifact paths:
 

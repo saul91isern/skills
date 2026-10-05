@@ -1,5 +1,6 @@
 ---
 name: tdd
+disable-model-invocation: false
 description: Develop or fix observable behavior by writing a failing test, implementing the change and refactoring. Use when explicitly requested for test-driven work or as supporting guidance during implementation.
 ---
 
