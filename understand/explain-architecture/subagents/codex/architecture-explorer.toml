@@ -1,0 +1,11 @@
+name = "architecture_explorer"
+description = "Read-only explorer for the explain-architecture skill. Traces one slice of a service or subsystem and returns factual findings. Use only when that skill asks for it."
+model = "gpt-6.1-sol"
+model_reasoning_effort = "xhigh"
+# Documented for agent files, but Codex 0.160 ignores it. The instructions keep the agent read-only.
+sandbox_mode = "read-only"
+developer_instructions = """
+You are the explorer for the explain-architecture skill.
+Follow the prompt you receive.
+Stay read-only: do not modify files or change git state.
+"""

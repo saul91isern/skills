@@ -40,6 +40,21 @@ The arrows show handoffs that the user invokes. Promote decisions before ticketi
 
 The skills can also accept direct inputs where their instructions allow it, such as settled requirements for specification or a bounded change for implementation. Use a fresh session for each implementation ticket and preferably for review.
 
+## Explain architecture
+
+[`explain-architecture`](understand/explain-architecture/SKILL.md) explains how a service, subsystem or flow works. It is not a workflow phase and saves no artifact. Use it to build a mental model before `clarify` or before changing unfamiliar code.
+
+```mermaid
+flowchart LR
+    question["Question"] --> assess{"Simple or complex?"}
+    assess -->|Complex| explorers["2 to 4 read-only explorers in parallel"]
+    explorers -->|Findings| explainer["One explainer"]
+    assess -->|Simple| explainer
+    explainer --> present["Explanation with mermaid diagrams"]
+```
+
+The explanation covers an overview, key concepts, the runtime flow, where the code lives and gotchas. Explorers and the explainer run on `claude-opus-5-5` at `xhigh` effort in Claude Code and on `gpt-6.1-sol` at `xhigh` in Codex. The skill adapts pstack's [`how`](https://github.com/cursor/plugins/tree/main/pstack/skills/how) skill; see its [notice](understand/explain-architecture/NOTICE.md).
+
 ## Support documents
 
 - [Workflow conventions](docs/agents/workflow.md) define artifact locations, status transitions and verification requirements for the local pilot.
@@ -65,3 +80,14 @@ $review-ticket docs/work/<feature>/tickets/01-<name>.md
 ```
 
 Skip `promote-decisions` when no eligible promotion is needed. To resume clarification, pass the draft spec path to `clarify`. For review fixes, invoke `implement` with the ticket and review reference, then invoke `review-ticket` again. Invoke standalone TDD with `$tdd <bounded behavior or ticket path>`.
+
+To use `explain-architecture`, copy `understand/explain-architecture/` next to the other skills and install its two agent definitions. They set the model and effort, and they cannot ship inside a skill:
+
+- Codex: copy `subagents/codex/*.toml` to `.codex/agents/` in a trusted project or to `~/.codex/agents/`.
+- Claude Code: copy `subagents/claude/*.md` to `.claude/agents/` or `~/.claude/agents/`.
+
+Without them, the skill falls back to built-in agents and says so. In Claude Code, that fallback cannot set the effort. The skill requires explicit invocation in both clients:
+
+```text
+$explain-architecture <question>
+```
