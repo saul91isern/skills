@@ -55,6 +55,22 @@ flowchart LR
 
 The explanation covers an overview, key concepts, the runtime flow, where the code lives and gotchas. Explorers and the explainer run on `claude-opus-5-5` at `xhigh` effort in Claude Code and on `gpt-6.1-sol` at `xhigh` in Codex. The skill adapts pstack's [`how`](https://github.com/cursor/plugins/tree/main/pstack/skills/how) skill; see its [notice](understand/explain-architecture/NOTICE.md).
 
+## Map journeys
+
+[`map-journeys`](understand/map-journeys/SKILL.md) scopes and prioritizes the user journeys of an app across its frontend and microservices. It is not a workflow phase. Use it to decide what to cover with end-to-end tests. It writes `journeys.md` to the integration test repo, sorted by score, and updates the file if it already exists.
+
+```mermaid
+flowchart LR
+    find["Find candidate journeys"] --> trace["Map journeys to services"]
+    trace --> evidence["Gather usage, churn and breakage evidence"]
+    evidence --> score["Score and tier P1 to P3"]
+    score -->|User adjusts the ranked table| write["Write journeys.md"]
+```
+
+Each journey scores `Impact × (Usage + Risk)`, and the tier is assigned by judgment. Missing signals are recorded as "no data" rather than guessed.
+
+The skill calls two skills from other stacks: `grill-with-docs` from [mattpocock/skills](https://github.com/mattpocock/skills) to find the journeys, and `how` from [pstack](https://github.com/cursor/plugins/tree/main/pstack/skills) to trace them through the services. Install both alongside it.
+
 ## Support documents
 
 - [Workflow conventions](docs/agents/workflow.md) define artifact locations, status transitions and verification requirements for the local pilot.
