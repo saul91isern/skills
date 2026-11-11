@@ -1,58 +1,93 @@
 ---
 name: map-journeys
-description: Scope, prioritize and map the user journeys of an app across its frontend and microservices. Use when deciding what to cover with end-to-end tests. Produces a prioritized journey map for the integration test repo.
+description: Scope, prioritize and map the user journeys of an app across its frontend and microservices, including the side effects each journey must produce. Use when deciding what to cover with end-to-end tests. Produces journeys.yaml for the integration test repo, plus findings.md for issues found along the way.
 ---
 
-# Map Journeys
+# Map journeys
 
-Produce a prioritized map of the journeys this app supports and the services each one touches. The integration repo uses this map to write E2E tests in priority order.
+Produce a prioritized map of the journeys this app supports, the services each one touches,
+and the side effects that prove it worked. The integration repo uses the map to write E2E
+tests in priority order.
 
 ## 1. Find candidate journeys
 
 Run `/grill-with-docs` to learn what the app is for and who relies on it. Come out with:
-- candidate journeys, each written as a user goal ("Customer places an order and receives confirmation")
-- the domain vocabulary used to name them
+- candidate journeys, each written as a user goal
+- the domain vocabulary, including every actor named in a goal
 
-Keep journeys coarse. Variants such as a declined card or an out-of-stock item belong inside a journey, not as separate journeys.
+Keep journeys coarse. Variants belong inside a journey.
 
-## 2. Map journeys to services
+## 2. Trace each journey
 
-Use `/how` to trace each journey through the system. For each journey, record:
-- the services it touches, in call order
-- external dependencies
-- asynchronous hops (queues, events)
+Use `/how` to follow each journey through the system. Record:
+- services in call order, external dependencies, and async hops
+- **success:** the end state that proves the journey worked
+- **side effects:** for every write or async hop, what should happen, where to observe it,
+  and how long to wait. Prefer the read path a user would hit over reading a store directly.
+  Mark each one as `async`, `scheduled` or `external`.
+- **variants:** failure paths, plus update, delete and permission cases. Stale data
+  often shows up here.
 
-## 3. Gather evidence
+## 3. Check the harness
 
-Look for signals of use and risk in the code each journey touches:
-- **Usage:** analytics, API traffic or logs, if the user can provide them. If they can't, record "no data".
-- **Churn:** how often that code changes in git history.
+Read what the integration repo can run today. Mark each journey and each side effect as
+`ready`, `partial` or `blocked`, with one line saying what is missing.
+
+## 4. Gather evidence
+
+For the code each journey touches:
+- **Usage:** analytics, API traffic or logs. If there are none, write "no data". Label user
+  estimates as estimates.
+- **Churn:** commits in a stated window.
 - **Breakage:** fix commits, reverts and CHANGELOG "Fixed" entries.
 
-If a signal is missing, say so. Don't fill the gap with a guess.
+Summarize as counts. Don't fill gaps with guesses.
 
-## 4. Score and tier
+## 5. Score and tier
 
-Rate each journey from 1 to 5:
-- **Impact:** how bad a failure would be (revenue, blocked users, data, compliance)
-- **Usage:** how often the journey is used
-- **Risk:** churn, breakage history and the number of services involved
-
-Score = Impact × (Usage + Risk). Use the score to order the journeys. Then assign tiers by judgment:
+Rate Impact, Usage and Risk from 1 to 5. Score each journey as Impact × (Usage + Risk).
+The score sets the order. Tiers are a judgment call:
 - **P1:** a failure would trigger a rollback or an incident
 - **P2:** important, but a failure wouldn't stop the business
-- **P3:** low stakes; API-level or contract tests are probably enough
+- **P3:** low stakes; API or contract tests are probably enough
 
-Show the ranked table to the user and adjust it based on their feedback before writing the map.
+Give a one-line reason when equal scores land in different tiers. Show the ranked list to the
+user and adjust it before writing.
+
+## Keep the map clean
+
+Write anything that isn't map content to `findings.md`. That includes suspected bugs,
+security issues, documentation gaps, merge and branch notes, and method notes. Tell the user
+about security issues right away. Keep absolute local paths, commit hashes and branch
+history out of the map.
 
 ## Output
 
-Write `journeys.md` to the integration repo, sorted by score. If the file already exists, update it instead of replacing it.
+Write `journeys.yaml` to the integration repo, sorted by score. If it exists, update it and
+keep existing `id`s stable, because tests reference them.
 
-    ## <Journey name> — P1 (score 45)
-    Goal: <user goal>
-    Services: Frontend → Cart → Orders → Payments → Notifications
-    External: Stripe, email provider
-    Async: OrderPlaced event → Notifications
-    Evidence: <usage / churn / breakage, or "no data">
-    Variants: <failure and edge cases worth testing>
+```yaml
+- id: concept-publish
+  name: <journey name>
+  tier: P1
+  score: 45
+  goal: <user goal>
+  services: [td-web, kong, td-bg, td-audit]
+  external: [postgres, elasticsearch, redis]
+  status: partial   # <what the harness is missing>
+  evidence: "Usage 5 (estimate). Churn <n> commits. Breakage <n> fixes, <n> CHANGELOG fixes."
+  success:
+    - concept version is published
+  side_effects:
+    - what: concept is searchable
+      observe: POST /api/business_concept_versions/search
+      kind: async
+      within: 15s
+      harness: ready
+    - what: relations reindexed
+      observe: td-lm
+      kind: async
+      harness: blocked   # td-lm not running
+  variants:
+    - update, then search immediately and again after the refresh
+```
